@@ -27,9 +27,11 @@
 								</option>
 								<option id="macosx.cpp.link.option.paths.821627066" name="Library search path (-L)" superClass="macosx.cpp.link.option.paths" useByScannerDiscovery="false" valueType="libPaths">
 									<listOptionValue builtIn="false" value="/Library/Frameworks/SDL2.framework"/>
+									<listOptionValue builtIn="false" value="/usr/include/"/>
+									<listOptionValue builtIn="false" value="/usr/lib/x86_64-linux-gnu/"/>
 									<listOptionValue builtIn="false" value="/Library/Frameworks/SDL2_image.framework"/>
 								</option>
-								<option id="macosx.cpp.link.option.flags.1442826893" superClass="macosx.cpp.link.option.flags" useByScannerDiscovery="false" value="-std=c++11" valueType="string"/>
+								<option id="macosx.cpp.link.option.flags.1442826893" name="Linker flags" superClass="macosx.cpp.link.option.flags" useByScannerDiscovery="false" value="-std=c++11" valueType="string"/>
 								<inputType id="cdt.managedbuild.tool.macosx.cpp.linker.input.439528762" superClass="cdt.managedbuild.tool.macosx.cpp.linker.input">
 									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
 									<additionalInput kind="additionalinput" paths="$(LIBS)"/>
@@ -42,7 +44,7 @@
 							<tool id="cdt.managedbuild.tool.gnu.cpp.compiler.macosx.base.150376414" name="GCC C++ Compiler" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.macosx.base">
 								<option id="gnu.cpp.compiler.option.optimization.level.778106873" name="Optimization Level" superClass="gnu.cpp.compiler.option.optimization.level" useByScannerDiscovery="false" value="gnu.cpp.compiler.optimization.level.most" valueType="enumerated"/>
 								<option id="gnu.cpp.compiler.option.debugging.level.1409588777" name="Debug Level" superClass="gnu.cpp.compiler.option.debugging.level" useByScannerDiscovery="false" value="gnu.cpp.compiler.debugging.level.none" valueType="enumerated"/>
-								<option id="gnu.cpp.compiler.option.other.other.1990780975" superClass="gnu.cpp.compiler.option.other.other" useByScannerDiscovery="false" value="-c -fmessage-length=0 -std=c++11" valueType="string"/>
+								<option id="gnu.cpp.compiler.option.other.other.1990780975" name="Other flags" superClass="gnu.cpp.compiler.option.other.other" useByScannerDiscovery="false" value="-c -fmessage-length=0 -std=c++11" valueType="string"/>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.186064090" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
 							</tool>
 							<tool id="cdt.managedbuild.tool.gnu.c.compiler.macosx.base.170322140" name="GCC C Compiler" superClass="cdt.managedbuild.tool.gnu.c.compiler.macosx.base">
@@ -51,7 +53,7 @@
 								</option>
 								<option defaultValue="gnu.c.optimization.level.most" id="gnu.c.compiler.option.optimization.level.430712284" name="Optimization Level" superClass="gnu.c.compiler.option.optimization.level" useByScannerDiscovery="false" valueType="enumerated"/>
 								<option id="gnu.c.compiler.option.debugging.level.1736530258" name="Debug Level" superClass="gnu.c.compiler.option.debugging.level" useByScannerDiscovery="false" value="gnu.c.debugging.level.none" valueType="enumerated"/>
-								<option id="gnu.c.compiler.option.misc.other.1137824373" superClass="gnu.c.compiler.option.misc.other" useByScannerDiscovery="false" value="-c -fmessage-length=0 -std=c++11" valueType="string"/>
+								<option id="gnu.c.compiler.option.misc.other.1137824373" name="Other flags" superClass="gnu.c.compiler.option.misc.other" useByScannerDiscovery="false" value="-c -fmessage-length=0 -std=c++11" valueType="string"/>
 								<inputType id="cdt.managedbuild.tool.gnu.c.compiler.input.1313156447" superClass="cdt.managedbuild.tool.gnu.c.compiler.input"/>
 							</tool>
 						</toolChain>

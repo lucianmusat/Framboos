@@ -1,5 +1,4 @@
-#ifndef CLEANUP_H
-#define CLEANUP_H
+#pragma once
 
 #include <utility>
 #include <SDL2/SDL.h>
@@ -50,4 +49,3 @@ inline void cleanup<SDL_Surface>(SDL_Surface *surf){
 	SDL_FreeSurface(surf);
 }
 
-#endif

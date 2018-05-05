@@ -2,7 +2,11 @@
 #include <string>
 #include <iostream>
 #include <SDL2/SDL.h>
+#ifdef __APPLE__
 #include <SDL2_image/SDL_image.h>
+#elif __linux__
+#include <SDL2/SDL_image.h>
+#endif
 #include <vector>
 #include "include/Utils.h"
 
