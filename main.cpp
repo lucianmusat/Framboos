@@ -10,7 +10,7 @@
 #include <SDL2/SDL.h>
 #ifdef __APPLE__
 #include <SDL2_image/SDL_image.h>
-#elif __linux__
+#elif __linux__ || _WIN32 || _WIN64
 #include <SDL2/SDL_image.h>
 #endif
 #include "cleanup.h"
@@ -30,61 +30,64 @@ int main(int, char**){
     Utils utils;
     const std::string RESOURCE_PATH = utils.getResourcePath();
 
-	if (SDL_Init(SDL_INIT_VIDEO) != 0){
+    if (SDL_Init(SDL_INIT_VIDEO) != 0){
         utils.logSDLInfo(std::cout, "SDL_Init");
-		return 1;
-	}
+        return 1;
+    }
     IMG_Init(IMG_INIT_JPG);
-	SDL_Window* window = SDL_CreateWindow("Project Framboos", 100, 100, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
-	if (window == nullptr){
-		utils.logSDLInfo(std::cout, "CreateWindow");
-		SDL_Quit();
-		return 1;
-	}
-	SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN);
-	SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
-	if (renderer == nullptr){
-		utils.logSDLInfo(std::cout, "CreateRenderer");
-		cleanup(window);
-		SDL_Quit();
-		return 1;
-	}
+    SDL_Window* window = SDL_CreateWindow("Project Framboos", 100, 100, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
+    if (window == nullptr){
+        utils.logSDLInfo(std::cout, "CreateWindow");
+        SDL_Quit();
+        return 1;
+    }
+//  SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN);
+    SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+    if (renderer == nullptr){
+        utils.logSDLInfo(std::cout, "CreateRenderer");
+        cleanup(window);
+        SDL_Quit();
+        return 1;
+    }
 
-	//Temporary background until we build the stage classes.
-	struct stat info;
+    //Temporary background until we build the stage classes.
+    struct stat info;
+    if(stat(RESOURCE_PATH.c_str(), &info) != 0) {
+        printf("Error: cannot access %s!!\n", RESOURCE_PATH.c_str());
+        return -1;
+    }
 
-	if(stat(RESOURCE_PATH.c_str(), &info) != 0) {
-	    printf("Error: cannot access %s!!\n", RESOURCE_PATH.c_str());
-	    return -1;
-	}
+    SDL_Texture* background = utils.loadTexture(RESOURCE_PATH + "background.jpg", renderer);
 
-	SDL_Texture* background = utils.loadTexture(RESOURCE_PATH + "stage2.png", renderer);
-
-	if (background == nullptr){
-		cleanup(background, renderer, window);
-		SDL_Quit();
-		return 1;
-	}
+    if (background == nullptr){
+        cleanup(background, renderer, window);
+        SDL_Quit();
+        return 1;
+    }
 
     bool quit = false;
-	int bW, bH, iW, iH;
-	int player_velocity = 10;
-	SDL_QueryTexture(background, NULL, NULL, &bW, &bH);
+    int bW, bH; //, iW , iH;
+//  int player_velocity = 10;
+    SDL_QueryTexture(background, NULL, NULL, &bW, &bH);
 
-    SDL_Rect stageBackground;
-    stageBackground.x = 0;
-    stageBackground.y = 0;
-    stageBackground.w = bW;
-    stageBackground.h = SCREEN_HEIGHT;
+//    SDL_Rect stageBackground;
+//    stageBackground.x = 0;
+//    stageBackground.y = 0;
+//    stageBackground.w = bW;
+//    stageBackground.h = SCREEN_HEIGHT;
 
     utils.logSDLInfo(std::cout, "Starting");
     SDL_Event event;
-    Player player1(renderer, 100, SCREEN_HEIGHT - 164);
+    Player player1(renderer, "Player/goku.png", 100, SCREEN_HEIGHT - 250);
 
 
     while( !quit ){
         while( SDL_PollEvent( &event ) ){
             switch( event.type ){
+                // Close the window
+                case SDL_QUIT:
+                    quit = true;
+                    break;
                 case SDL_KEYDOWN:
                     switch( event.key.keysym.sym ){
                         case SDLK_q:
@@ -94,7 +97,7 @@ int main(int, char**){
                             quit = true;
                             break;
                         case SDLK_RIGHT:
-                            player1.setAction("walkforward");
+                            player1.walk_forward();
                             break;
                         default:
                             break;
@@ -103,7 +106,7 @@ int main(int, char**){
                 case SDL_KEYUP:
                     switch( event.key.keysym.sym ){
                         case SDLK_RIGHT:
-                            player1.setAction("idle");
+                            player1.idle();
                             break;
                         default:
                             break;
@@ -111,16 +114,16 @@ int main(int, char**){
                     break;
             }
         }
-    utils.renderTexture(background, renderer, 0, 0);
-    player1.Render();
-    SDL_RenderPresent(renderer);
+        utils.renderTexture(background, renderer, 0, 0, bW, bH*2);
+        player1.Render();
+        SDL_RenderPresent(renderer);
     }
 
-	cleanup(background, renderer, window);
-	IMG_Quit();
-	SDL_Quit();
+    cleanup(background, renderer, window);
+    IMG_Quit();
+    SDL_Quit();
 
-	return 0;
+    return 0;
 }
 
 

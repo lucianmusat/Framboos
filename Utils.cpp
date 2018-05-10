@@ -4,7 +4,7 @@
 #include <SDL2/SDL.h>
 #ifdef __APPLE__
 #include <SDL2_image/SDL_image.h>
-#elif __linux__
+#elif __linux__ || _WIN32 || _WIN64
 #include <SDL2/SDL_image.h>
 #endif
 
@@ -19,7 +19,7 @@ SDL_Texture* Utils::loadTexture(const std::string &file, SDL_Renderer *ren){
 	SDL_Texture *texture = nullptr;
 	//Load the image
 	SDL_Surface *loadedImage = IMG_Load(file.c_str());
-	if(SDL_SetColorKey( loadedImage, SDL_TRUE, SDL_MapRGB(loadedImage->format, 112, 136, 136))) printf("%s", SDL_GetError());
+	if(SDL_SetColorKey(loadedImage, SDL_TRUE, SDL_MapRGB(loadedImage->format, 112, 136, 136))) printf("%s", SDL_GetError());
 	//If the loading went ok, convert to texture and return the texture
 	if (loadedImage != nullptr){
 		texture = SDL_CreateTextureFromSurface(ren, loadedImage);
@@ -42,6 +42,16 @@ void Utils::renderTexture(SDL_Texture *tex, SDL_Renderer *ren, int x, int y){
 	dst.y = y;
 	//Query the texture to get its width and height to use
 	SDL_QueryTexture(tex, NULL, NULL, &dst.w, &dst.h);
+	SDL_RenderCopy(ren, tex, NULL, &dst);
+}
+
+void Utils::renderTexture(SDL_Texture *tex, SDL_Renderer *ren, int x, int y, int w, int h){
+	//Setup the destination rectangle to be at the position we want
+	SDL_Rect dst;
+	dst.x = x;
+	dst.y = y;
+	dst.w = w;
+	dst.h = h;
 	SDL_RenderCopy(ren, tex, NULL, &dst);
 }
 

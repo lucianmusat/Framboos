@@ -4,28 +4,21 @@
 #include <SDL2/SDL.h>
 #ifdef __APPLE__
 #include <SDL2_image/SDL_image.h>
-#elif __linux__
+#elif __linux__ || _WIN32 || _WIN64
 #include <SDL2/SDL_image.h>
 #endif
 #include <vector>
 #include "include/Utils.h"
 
-using namespace std;
-
 Utils utils;
 
-int player_x = 0;
-int player_y = 0;
-string currentAction = "idle";
-SDL_Renderer* renderer;
-SDL_Texture* spritesheet;
-
-Player::Player(SDL_Renderer* c_renderer, int x, int y)
+Player::Player(SDL_Renderer* c_renderer, std::string spritesheet_file, int x, int y)
 {
-    player_x = x;
-    player_y = y;
-    renderer = c_renderer;
-    spritesheet = utils.loadTexture(utils.getResourcePath() + "Player/spritesheet.png", renderer);
+    this->x = x;
+    this->y = y;
+    this->renderer = c_renderer;
+    this->spritesheet = utils.loadTexture(utils.getResourcePath() + spritesheet_file, renderer);
+//    this->spritesheet = utils.loadTexture(utils.getResourcePath() + "Player/spritesheet.png", renderer);
     //SDL_QueryTexture(playerTexture, NULL, NULL, &playerWidth, &playerHeight);
 }
 
@@ -35,8 +28,9 @@ void playSprite(SDL_Renderer *renderer, SDL_Texture* spritesheet, int line, int 
         Uint32 sprite = (ticks / 100) % columns;
         int a = sprite * cw;
         int b = line* ch - ch;
-        SDL_Rect srcrect = { a, b, 64, 64 };
-        SDL_Rect dstrect = { x, y, ch*2, cw*2 }; // double it's size because the sprite is pretty small
+        // First is height and then width!
+        SDL_Rect srcrect = { a, b, 60, 100 };
+        SDL_Rect dstrect = { x, y, ch, cw*2 }; // double it's size because the sprite is pretty small
         SDL_RenderCopy(renderer, spritesheet, &srcrect, &dstrect);
         //utils.logSDLInfo(cout, to_string(x) + ":" + to_string(y));
 }
@@ -49,18 +43,26 @@ void Player::Render()
         walkForward();
 }
 
-void Player::setAction(string action)
+void Player::setAction(std::string action)
 {
     currentAction = action;
 }
 
+void Player::walk_forward(){
+	this->currentAction = "walkforward";
+}
+
+void Player::idle(){
+	this->currentAction = "idle";
+}
+
 void Player::Idle()
 {
-    playSprite(renderer, spritesheet, 4, 7, 64, 64, player_x, player_y);
+    playSprite(renderer, spritesheet, 1, 5, 100, 60, this->x, this->y);
 }
 
 void Player::walkForward()
 {
-    playSprite(renderer, spritesheet, 12, 9, 64, 64, player_x, player_y);
-    player_x ++;
+    playSprite(renderer, spritesheet, 2, 8, 64, 64, this->x, this->y);
+    this->x++;
 }
