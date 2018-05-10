@@ -78,7 +78,7 @@ int main(int, char**){
 
     utils.logSDLInfo(std::cout, "Starting");
     SDL_Event event;
-    Player player1(renderer, "Player/goku.png", 100, SCREEN_HEIGHT - 250);
+    Player player1(renderer, "Player/goku.png", 100, SCREEN_HEIGHT - 260);
 
 
     while( !quit ){
@@ -99,16 +99,17 @@ int main(int, char**){
                         case SDLK_RIGHT:
                             player1.walk_forward();
                             break;
+                        case SDLK_LEFT:
+                            player1.walk_backward();
+                            break;
                         default:
                             break;
                     }
                     break;
                 case SDL_KEYUP:
                     switch( event.key.keysym.sym ){
-                        case SDLK_RIGHT:
-                            player1.idle();
-                            break;
                         default:
+                            player1.idle();
                             break;
                     }
                     break;
@@ -125,6 +126,3 @@ int main(int, char**){
 
     return 0;
 }
-
-
-

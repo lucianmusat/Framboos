@@ -17,11 +17,13 @@ class Player
 	SDL_Renderer* renderer;
 	SDL_Texture* spritesheet;
     void walkForward();
+    void walkBackward();
     void Idle();
 
     public:
         Player(SDL_Renderer*, std::string, int, int);
         void walk_forward();
+        void walk_backward();
         void idle();
         void Render();
         void setAction(std::string);

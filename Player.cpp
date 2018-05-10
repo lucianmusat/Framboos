@@ -22,25 +22,30 @@ Player::Player(SDL_Renderer* c_renderer, std::string spritesheet_file, int x, in
     //SDL_QueryTexture(playerTexture, NULL, NULL, &playerWidth, &playerHeight);
 }
 
-void playSprite(SDL_Renderer *renderer, SDL_Texture* spritesheet, int line, int columns, int ch, int cw, int x, int y){
+void playSprite(SDL_Renderer *renderer, SDL_Texture* spritesheet, int line, int columns, int ch, int cw, int x, int y, bool reverse){
 
-        Uint32 ticks = SDL_GetTicks();
-        Uint32 sprite = (ticks / 100) % columns;
-        int a = sprite * cw;
-        int b = line* ch - ch;
+        int ticks = SDL_GetTicks();
+        int sprite = (ticks / 100) % columns;
+        if (reverse)
+            sprite = (columns - sprite -1);
         // First is height and then width!
-        SDL_Rect srcrect = { a, b, 60, 100 };
+        SDL_Rect srcrect = { sprite * cw, line* ch - ch, 60, 100 };
         SDL_Rect dstrect = { x, y, ch, cw*2 }; // double it's size because the sprite is pretty small
         SDL_RenderCopy(renderer, spritesheet, &srcrect, &dstrect);
-        //utils.logSDLInfo(cout, to_string(x) + ":" + to_string(y));
+        //utils.logSDLInfo(std::cout, std::to_string(x) + ":" + std::to_string(y));
 }
 
 void Player::Render()
 {
-    if (currentAction == "idle")
+    if (currentAction == "idle") {
         Idle();
-    if (currentAction == "walkforward")
+    }
+    if (currentAction == "walkforward") {
         walkForward();
+    }
+    if (currentAction == "walkbackward") {
+        walkBackward();
+    }
 }
 
 void Player::setAction(std::string action)
@@ -49,20 +54,35 @@ void Player::setAction(std::string action)
 }
 
 void Player::walk_forward(){
-	this->currentAction = "walkforward";
+    this->currentAction = "walkforward";
 }
 
+void Player::walk_backward(){
+    if (this->x >= 10) {
+        this->currentAction = "walkbackward";
+    } else {
+        this->currentAction = "idle";
+    }
+}
+
+
 void Player::idle(){
-	this->currentAction = "idle";
+    this->currentAction = "idle";
 }
 
 void Player::Idle()
 {
-    playSprite(renderer, spritesheet, 1, 5, 100, 60, this->x, this->y);
+    playSprite(renderer, spritesheet, 1, 5, 100, 60, this->x, this->y, false);
 }
 
 void Player::walkForward()
 {
-    playSprite(renderer, spritesheet, 2, 8, 64, 64, this->x, this->y);
+    playSprite(renderer, spritesheet, 2, 6, 100, 60, this->x, this->y, false);
     this->x++;
+}
+
+void Player::walkBackward()
+{
+    playSprite(renderer, spritesheet, 2, 6, 100, 60, this->x, this->y, true);
+    this->x--;
 }
